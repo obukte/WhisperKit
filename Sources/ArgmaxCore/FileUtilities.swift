@@ -3,7 +3,9 @@
 
 import Foundation
 
-#if canImport(PDFKit)
+// PDFKit is not available on tvOS at runtime (canImport succeeds at compile time
+// because SDK headers exist, but the framework is absent on tvOS devices).
+#if canImport(PDFKit) && !os(tvOS)
 import PDFKit
 #endif
 
@@ -37,7 +39,7 @@ public enum FileUtilities {
 
     // MARK: - PDF
 
-    #if canImport(PDFKit)
+    #if canImport(PDFKit) && !os(tvOS)
     private static func readPDF(at url: URL) -> String? {
         guard let document = PDFDocument(url: url) else { return nil }
         var pages: [String] = []
